@@ -1,0 +1,12 @@
+builder:
+  dataset_name: "lawful-good-project/sud-resh-benchmark"
+  split: train
+
+chunker:
+  chunk_size: 512
+  overlap: 50
+
+text_field: "text"
+category_field: "category"
+
+output_dir: "data/processed"

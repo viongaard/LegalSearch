@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class DatasetBuilder:
+class Builder:
     """Загрузчик и преобразователь датасета судебных решений."""
 
     def __init__(self, dataset_name: str = "lawful-good-project/sud-resh-benchmark", split: str = 'train'):
