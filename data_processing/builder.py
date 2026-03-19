@@ -18,6 +18,7 @@ class Builder:
 
     def print_dataset_info(self):
         """Вывод информации о загруженном датасете."""
+
         logger.debug("Вывод информации о датасете")
         print("\n--- Информация о датасете ---")
         print(f"Колонки: {self.df.columns.tolist()}")
@@ -28,13 +29,8 @@ class Builder:
         print(self.df.describe(include='all'))
 
     def fill_target_dataset(self, text_field: str = 'source', category_field: str = 'category'):
-        """
-        Создание целевого датасета для работы системы.
+        """Создание целевого датасета для работы системы."""
 
-        Args:
-            text_field: название поля с текстом документа
-            category_field: название поля с категорией документа
-        """
         logger.info("Создание целевого датасета")
 
         # Проверка наличия полей
