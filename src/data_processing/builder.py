@@ -61,7 +61,7 @@ class Builder:
                     f"уникальных категорий: {self.target_df['category'].nunique()}")
         return self.target_df
 
-    def save_target_dataset(self, path: str = 'data/processed/dataset.parquet'):
+    def save_target_dataset(self, path: str = 'data/processed/documents.parquet'):
         """Сохранение целевого датасета в Parquet."""
         if self.target_df is None:
             raise ValueError("Целевой датасет не создан. Сначала вызовите fill_target_dataset().")
@@ -74,7 +74,7 @@ class Builder:
         size_mb = path.stat().st_size / (1024 * 1024)
         logger.info(f"Сохранено: {path} ({size_mb:.2f} MB)")
 
-    def load_target_dataset(self, path: str = "data/processed/dataset.parquet"):
+    def load_target_dataset(self, path: str = "data/processed/documents.parquet"):
         """Загрузка ранее сохранённого целевого датасета."""
         logger.info(f"Загрузка датасета из {path}")
         self.target_df = pd.read_parquet(path)

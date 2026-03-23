@@ -1,5 +1,7 @@
+pyyaml~=6.0.2
 pandas~=2.2.3
-natasha~=1.6.0
 numpy~=1.26.4
-tqdm~=4.67.1
+natasha~=1.6.0
 datasets~=2.19.1
+sentence-transformers~=5.1.2
+faiss-cpu~=1.12.0

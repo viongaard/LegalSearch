@@ -1,12 +1,19 @@
 builder:
-  dataset_name: "lawful-good-project/sud-resh-benchmark"
-  split: train
+    dataset_name: "lawful-good-project/sud-resh-benchmark"
+    split: train
 
 chunker:
-  chunk_size: 512
-  overlap: 50
+    chunk_size: 512
+    overlap: 50
 
-text_field: "text"
+embedder:
+    model_name: "cointegrated/rubert-tiny2"
+    device: "cpu"
+
+vector_store:
+    index_type: "flat" # flat для точности, ivf для скорости
+
+text_field: "source"
 category_field: "category"
 
 output_dir: "data/processed"
