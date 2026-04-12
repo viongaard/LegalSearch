@@ -57,12 +57,25 @@ class Builder:
             'entities': [[] for _ in range(len(self.df))]
         })
 
+        # Удаление дубликатов
+        original_count = len(self.target_df)
+        self.target_df = self.target_df.drop_duplicates(subset=['text'], keep='first')
+        removed_count = original_count - len(self.target_df)
+
+        if removed_count > 0:
+            logger.info(
+                f"Удалено дубликатов документов: {removed_count} (было {original_count}, стало {len(self.target_df)})")
+        else:
+            logger.info(f"Дубликатов документов не найдено")
+
         logger.info(f"Создан датасет: {len(self.target_df)} записей, "
                     f"уникальных категорий: {self.target_df['category'].nunique()}")
+
         return self.target_df
 
     def save_target_dataset(self, path: str = 'data/processed/documents.parquet'):
         """Сохранение целевого датасета в Parquet."""
+
         if self.target_df is None:
             raise ValueError("Целевой датасет не создан. Сначала вызовите fill_target_dataset().")
 
@@ -76,6 +89,7 @@ class Builder:
 
     def load_target_dataset(self, path: str = "data/processed/documents.parquet"):
         """Загрузка ранее сохранённого целевого датасета."""
+
         logger.info(f"Загрузка датасета из {path}")
         self.target_df = pd.read_parquet(path)
         logger.info(f"Загружено {len(self.target_df)} записей")
