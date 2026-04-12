@@ -1,0 +1,21 @@
+index_path: "data/processed/index.faiss"
+metadata_path: "data/processed/chunks.parquet"
+
+embedder:
+    model_name: "cointegrated/rubert-tiny2"
+    device: "cpu"
+
+ranker:
+    model_name: "DiTy/cross-encoder-russian-msmarco"
+    device: "cpu"
+
+query_classifier:
+    type: "finetuned"
+    model_path: "models/classifier_v2"
+    device: "cpu"
+    threshold: 0.5
+    neighbor_threshold: 0.15 # порог для включения в expanded_categories
+
+search:
+    retrieve_k: 50
+    rank_k: 10
