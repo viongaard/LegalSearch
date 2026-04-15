@@ -1,0 +1,28 @@
+# Конфигурация обучения классификатора
+
+model_name: "cointegrated/rubert-tiny2"
+max_length: 256
+batch_size: 16
+learning_rate: 2e-5
+epochs: 10
+
+output_dir: "models/classifier"
+
+# Источник данных: "dataset" или "csv"
+data_source: "dataset"
+
+# Настройки для dataset (test_split игнорируется, т.к. в датасете нет test)
+dataset:
+    name: "lawful-good-project/sud-resh-benchmark"
+    train_split: "train"
+    text_field: "source"  # или "text"
+    max_samples: null
+
+# Настройки для CSV (если data_source = "csv")
+csv:
+    path: "data/queries_categories.csv"
+    text_column: "query_text"
+    category_column: "category"
+
+# Тестирование после обучения на отложенной выборке (10% от данных)
+test_after_train: true

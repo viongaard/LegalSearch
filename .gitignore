@@ -1,1 +1,26 @@
-data
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+env/
+
+# Data (игнорируем, но сохраняем структуру)
+data/
+!data/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Notebooks
+.ipynb_checkpoints/
+nb.py
+
+# models
+models
