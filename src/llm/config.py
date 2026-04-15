@@ -14,9 +14,9 @@ try:
 except ImportError:
     pass
 
-# Yandex GPT настройки (твои данные)
-YANDEX_CLOUD_API_KEY = os.getenv("YANDEX_CLOUD_API_KEY", "AQVNwP94jCOD1Vu-NXrH_KkgUA2w78i9ywUHKb6F")
-YANDEX_CLOUD_FOLDER = os.getenv("YANDEX_CLOUD_FOLDER", "b1goqif30h3m8fgniagj")
+# Yandex GPT настройки
+YANDEX_CLOUD_API_KEY = os.getenv("YANDEX_CLOUD_API_KEY", "xxxxxxxx")
+YANDEX_CLOUD_FOLDER = os.getenv("YANDEX_CLOUD_FOLDER", "xxxxxxxx")
 YANDEX_CLOUD_MODEL = os.getenv("YANDEX_CLOUD_MODEL", "yandexgpt-5-lite/latest")
 BASE_URL = "https://ai.api.cloud.yandex.net/v1"
 
