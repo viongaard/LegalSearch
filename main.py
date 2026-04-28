@@ -15,15 +15,14 @@ logger = logging.getLogger(__name__)
 
 def _print_analysis_report(result: dict):
     """Печать аналитического отчёта search_with_analysis"""
-    print(f"\n{'=' * 70}")
-    print(f"🔍 ЗАПРОС: {result['query']}")
-    print('=' * 70)
+
+    print(f"Запрос: {result['query']}")
 
     # Классификация
     cls = result.get('classification', {})
     if cls:
         print(
-            f"\n📌 КАТЕГОРИЯ: {cls.get('primary_category', 'unknown')} (уверенность: {cls.get('primary_confidence', 0):.2%})")
+            f"\nКатегория: {cls.get('primary_category', 'unknown')} (уверенность: {cls.get('primary_confidence', 0):.2%})")
         if cls.get('expanded_categories'):
             print(f"   Расширенные: {', '.join(cls['expanded_categories'])}")
 
@@ -67,8 +66,7 @@ def _print_analysis_report(result: dict):
 
     # Статистика
     stats = result.get('stats', {})
-    print(f"\n⚡ Время: {stats.get('time_sec', 0):.2f} сек | Документов: {stats.get('documents_found', 0)}")
-    print('=' * 70 + '\n')
+    print(f"\nВремя: {stats.get('time_sec', 0):.2f} сек | Документов: {stats.get('documents_found', 0)}")
 
 
 def _print_results(result: dict):
@@ -95,7 +93,6 @@ def _print_results(result: dict):
         print(f"   Ранжировочный балл: {r.get('rerank_score', r.get('faiss_score', 0)):.4f}")
         print(f"   Текст: {r['text']}")
 
-    print("\n" + "=" * 70 + "\n")
 
 
 def main():
@@ -123,7 +120,7 @@ def main():
             config = yaml.safe_load(f)
 
         indexing_pipeline = Indexing(config)
-        indexing_pipeline.run(max_docs=args.max_docs)
+        indexing_pipeline.run(use_dataset=True, folder_path='data/raw', max_docs=args.max_docs)
 
         logger.info("Индексация завершена")
 

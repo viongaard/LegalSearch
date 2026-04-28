@@ -24,7 +24,7 @@ def main():
         dataset_name="lawful-good-project/sud-resh-benchmark",
         split="train"
     )
-    builder.fill_target_dataset(
+    builder.build_from_dataset(
         text_field="source",
         category_field="category"
     )

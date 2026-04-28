@@ -41,59 +41,76 @@ class Indexing:
 
         logger.info("Индексация: инициализация произведена")
 
-    def run(self, max_docs: Optional[int] = None) -> pd.DataFrame:
-        """Запуск индексации."""
-
+    def run(self,
+            max_docs: Optional[int] = None,
+            use_dataset: bool = True,
+            folder_path: Optional[str] = None,
+            folder_extensions: Optional[list] = None,
+            max_docs_folder: Optional[int] = None
+            ) -> pd.DataFrame:
+        """Запуск индексации из датасета и/или папки."""
         logger.info("Запуск индексации...")
 
-        # 1. Загрузка и подготовка датасета
-        logger.info("Шаг 1/5: Загрузка датасета")
-        self.builder.fill_target_dataset(
-            text_field=self.text_field,
-            category_field=self.category_field
-        )
+        all_docs = []
 
-        docs_df = self.builder.target_df
-        if max_docs:
-            docs_df = docs_df.head(max_docs)
-            logger.info(f"Ограничение: {max_docs} документов")
-        logger.info(f"Загружено {len(docs_df)} документов")
+        # 1. Загружаем из датасета
+        if use_dataset:
+            logger.info("Загрузка датасета")
+            self.builder.build_from_dataset(
+                text_field=self.text_field,
+                category_field=self.category_field
+            )
+            docs_df = self.builder.target_df
+            if max_docs:
+                docs_df = docs_df.head(max_docs)
+            logger.info(f"Из датасета: {len(docs_df)} документов")
+            all_docs.append(docs_df)
 
-        # 2. Чанкинг
-        logger.info("Шаг 2/5: Разбиение на чанки")
-        chunks_df = self.chunker.run_chunking(docs_df)
+        # 2. Загружаем из папки
+        if folder_path:
+            logger.info("Загрузка из папки")
+            from src.query_classifier import QueryClassifier
+            classifier = QueryClassifier()
+            folder_docs = self.builder.build_from_folder(
+                folder_path=folder_path,
+                classifier=classifier,
+                extensions=folder_extensions,
+                max_docs=max_docs_folder
+            )
+            logger.info(f"Из папки: {len(folder_docs)} документов")
+            all_docs.append(folder_docs)
+
+        if not all_docs:
+            raise ValueError("Нет источников данных")
+
+        # Объединяем
+        combined_docs = pd.concat(all_docs, ignore_index=True)
+        logger.info(f"Всего документов: {len(combined_docs)}")
+
+        # 3. Чанкинг
+        logger.info("Чанкинг")
+        chunks_df = self.chunker.run_chunking(combined_docs)
         logger.info(f"Создано {len(chunks_df)} чанков")
 
-        # 3. Извлечение сущностей
-        logger.info("Шаг 3/5: Извлечение сущностей")
-        chunks_with_ner_df = self.ner.fill_dataset_entities(
-            chunks_df,
-            text_column_name='text'
-        )
+        # 4. Извлечение сущностей
+        logger.info("Извлечение сущностей")
+        chunks_with_ner_df = self.ner.fill_dataset_entities(chunks_df, 'text')
 
-        total_entities = chunks_with_ner_df['entities'].apply(len).sum()
-        logger.info(f"Всего найдено сущностей: {total_entities}")
+        # 5. Векторизация
+        logger.info("Векторизация")
+        embeddings = self.embedder.encode(chunks_with_ner_df['text'].tolist(), show_progress=True)
 
-        # 4. Векторизация
-        logger.info("Шаг 4/5: Векторизация чанков")
-        texts = chunks_with_ner_df['text'].tolist()
-        embeddings = self.embedder.encode(texts, show_progress=True)
-        logger.info(f"Созданы эмбеддинги формы: {embeddings.shape}")
-
-        # 5. Построение faiss индекса
-        logger.info("Шаг 5/5: Построение FAISS индекса")
+        # 6. Построение индекса
+        logger.info("Построение FAISS индекса")
         self.vector_store = VectorStore(
             dimension=embeddings.shape[1],
             index_type=self.index_type
         )
         self.vector_store.build(embeddings, chunks_with_ner_df)
 
-        # Сохранение результатов
+        # Сохранение
         self._save_results(chunks_with_ner_df, embeddings)
-
-        logger.info("Индексация завершена.")
-
-        return chunks_with_ner_df
+        logger.info("Индексация завершена")
 
     def _save_results(self, df: pd.DataFrame, embeddings: np.ndarray):
         """Сохранение всех результатов."""
