@@ -8,7 +8,6 @@ natasha~=1.6.0
 datasets~=2.19.1
 tqdm~=4.67.1
 transformers~=4.45.2
-yaml~=0.2.5
 pyyaml~=6.0.2
 scikit-learn~=1.6.1
 aiogram~=3.27.0
