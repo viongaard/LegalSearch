@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 # Загрузка переменных из .env
 ADMINS = [int(admin_id) for admin_id in config('TELEGRAM_BOT_ADMINS').split(',')]
-API_KEY = config('TELEGRAM_BOT_API_KEY')
+TOKEN = config('TELEGRAM_BOT_TOKEN')
 
 # Инициализация бота и диспетчера
-bot = Bot(token=config('TOKEN'), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher(storage=MemoryStorage())
 
 logger.info("Бот инициализирован")
