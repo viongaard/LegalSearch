@@ -84,17 +84,14 @@ python main.py --mode search --query "взыскание долга по дог�
 ## Текущее состояние
 Система на данный момент предоставляет базовый функционал поиска по текстовому запросу на естественном языке.
 
-## Структура проекта
-<img width="657" height="367" alt="image" src="https://github.com/user-attachments/assets/fb6aae0a-f363-4ecf-8ab9-95948dcdf170" />
+## Архитектура проекта
+<img width="643" height="776" alt="image" src="https://github.com/user-attachments/assets/857415f9-cfd3-49ec-ab8f-4438ac10531e" />
 
 
 ## Автор
 Вожегов Алексей Максимович  
-студент РТУ МИРЭА
 
 ## Демонстрация работы
-
-
-https://github.com/user-attachments/assets/4b89de0a-3142-447a-b5b4-c42d8887e22c
+https://github.com/user-attachments/assets/213507e6-300c-4067-9a9b-b8d3a93af1b8
 
 
